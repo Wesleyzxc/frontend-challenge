@@ -1,0 +1,10 @@
+.header {
+  background: linear-gradient(to bottom, black 50%, white 50%);
+  display: flex;
+  height: 25vh;
+  justify-content: center;
+}
+
+.logo {
+  scale: 75%;
+}
