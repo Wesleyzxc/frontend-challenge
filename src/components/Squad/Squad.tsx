@@ -1,9 +1,10 @@
-import { style } from '@mui/system';
+import { profile } from 'console';
 import { Fragment, useState } from 'react';
 import { AbilityName, ABILITY_NAMES, Character } from '../../types';
 import Metric from '../Metric/Metric';
 import MetricLine from '../Metric/MetricLine';
 import Profile from '../Profile/Profile';
+import CharacterTable from '../Table/CharacterTable';
 import styles from './Squad.module.css';
 
 type AbilityScoreMap = {
@@ -36,10 +37,10 @@ const Squad = () => {
       <div className={styles.profiles}>
         {teamProfiles.map((profile, i) => (
           <>
-            <Profile key={profile.id} />
+            <Profile key={profile.id} src={profile.thumbnail ?? profile.image} name={profile.name} />
           </>
         ))}
-        <Profile />
+        {/* <Profile /> */}
       </div>
       <div className={styles.metrics}>
         {ABILITY_NAMES.map((abilityName, i) => (
@@ -55,6 +56,8 @@ const Squad = () => {
         <div className={styles.break}></div>
       </div>
       <sub className={styles.sub}>* Totals as average for squad</sub>
+
+      <CharacterTable />
     </>
   );
 };

@@ -1,0 +1,13 @@
+.character {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.red {
+  color: red;
+}
+
+.center {
+  margin: auto;
+}

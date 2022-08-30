@@ -6,6 +6,7 @@ interface IProps<T extends {}> {
 }
 
 const Table = <T extends {}>({ columns, data }: IProps<T> & TableOptions<T>) => {
+  columns.map((col) => col.disableGlobalFilter);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setGlobalFilter } = useTable(
     {
       columns,
@@ -18,12 +19,12 @@ const Table = <T extends {}>({ columns, data }: IProps<T> & TableOptions<T>) => 
   return (
     <div className={styles.container}>
       <input type="text" placeholder="Search..." onChange={(e) => setGlobalFilter(e.target.value || '')} />
-      <table className={styles['table-element']} {...getTableProps()}>
+      <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <th className={styles.header} {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
                   <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                 </th>
@@ -32,14 +33,12 @@ const Table = <T extends {}>({ columns, data }: IProps<T> & TableOptions<T>) => 
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => (
-                  <td className={styles.cell} {...cell.getCellProps()}>
-                    {cell.render('Cell')}
-                  </td>
+                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 ))}
               </tr>
             );
