@@ -1,10 +1,8 @@
-import logo from './logo.svg'
-import './App.css'
-import jsonData from './data/characters.json'
-import type { Character } from './types'
-const data: Character[] = jsonData as Character[]
+import logo from './logo.svg';
+import { characterData } from './data/characters';
 
 function App() {
+  const data = characterData;
   return (
     <div className="App">
       <header className="App-header">
@@ -17,7 +15,7 @@ function App() {
         </a>
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
