@@ -1,0 +1,6 @@
+.line {
+  /* figma styles  */
+  width: 1px;
+  height: 100px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 51.04%, rgba(0, 0, 0, 0) 100%);
+}

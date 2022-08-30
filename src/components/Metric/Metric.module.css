@@ -1,0 +1,14 @@
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.3125rem;
+}
+
+.label {
+  font-size: medium;
+}
+
+.value {
+  font-size: x-large;
+}
