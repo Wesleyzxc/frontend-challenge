@@ -1,0 +1,19 @@
+.table-element {
+  border-spacing: 0;
+  border: 1px solid black;
+  margin-top: 10px;
+}
+
+.header,
+.cell {
+  margin: 0;
+  padding: 0.5rem;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+}
+
+.container {
+  width: 30%;
+  margin: auto;
+  margin-top: 1rem;
+}
