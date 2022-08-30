@@ -1,4 +1,3 @@
-import { profile } from 'console';
 import { Fragment, useState } from 'react';
 import { AbilityName, ABILITY_NAMES, Character } from '../../types';
 import Metric from '../Metric/Metric';
@@ -14,6 +13,7 @@ type AbilityScoreMap = {
 const Squad = () => {
   const [teamProfiles, setTeamProfiles] = useState<Character[]>([]);
   const title = teamProfiles.length ? 'Your champions!' : 'Select your squad to defend earthrealm';
+  console.log('🚀 - teamProfiles', teamProfiles);
 
   const sumOfAbility: AbilityScoreMap = teamProfiles.reduce(
     (acc, curr) => {
@@ -35,12 +35,9 @@ const Squad = () => {
     <>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.profiles}>
-        {teamProfiles.map((profile, i) => (
-          <>
-            <Profile key={profile.id} src={profile.thumbnail ?? profile.image} name={profile.name} />
-          </>
+        {teamProfiles.map((profile) => (
+          <Profile key={profile.id} src={profile.thumbnail ?? profile.image} name={profile.name} />
         ))}
-        {/* <Profile /> */}
       </div>
       <div className={styles.metrics}>
         {ABILITY_NAMES.map((abilityName, i) => (
@@ -53,11 +50,10 @@ const Squad = () => {
             {i === 2 && <MetricLine />}
           </Fragment>
         ))}
-        <div className={styles.break}></div>
       </div>
       <sub className={styles.sub}>* Totals as average for squad</sub>
 
-      <CharacterTable />
+      <CharacterTable setTeamProfiles={setTeamProfiles} />
     </>
   );
 };

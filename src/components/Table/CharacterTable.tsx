@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Column, CellProps } from 'react-table';
 import { characterData } from '../../data/characters';
-import { AbilityName, Character, CharacterAbility, CharacterTag } from '../../types';
+import { AbilityName, Character, CharacterAbility } from '../../types';
 import Profile from '../Profile/Profile';
 import Table from './Table';
 import styles from './CharacterTable.module.css';
@@ -10,18 +10,38 @@ const AbilityCell = ({ value }: CellProps<Character>) => (
   <b className={(styles.center, value === 10 ? styles.red : undefined)}>{value}</b>
 );
 
-const CharacterTable = () => {
+interface ICharacterTableProps {
+  setTeamProfiles: React.Dispatch<React.SetStateAction<Character[]>>;
+}
+
+const CharacterTable = ({ setTeamProfiles }: ICharacterTableProps) => {
+  const onClick = useCallback(
+    (clicked: Character, add: boolean) => {
+      add
+        ? setTeamProfiles((profiles) => [...profiles, clicked])
+        : setTeamProfiles((profiles) => profiles.filter((profile) => profile.id !== clicked.id));
+    },
+    [setTeamProfiles]
+  );
+
   const getAbilityScore = (abilities: CharacterAbility[], abilityToSearch: AbilityName) =>
     abilities.find((ability) => ability.abilityName === abilityToSearch)?.abilityScore ?? 0;
   const columns: Column<Character>[] = useMemo(
     () => [
       {
         accessor: 'name',
-        Cell: ({ value, row: { original } }: CellProps<Character>) => {
+        Cell: ({ value, row }: CellProps<Character>) => {
           return (
             <div className={styles.character}>
-              <input type="checkbox" />
-              <Profile size={40} name={original.name} src={original.thumbnail ?? original.image} />
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  // quick way to toggle without handling internal state
+                  row.toggleRowSelected();
+                  onClick(row.original, e.target.checked);
+                }}
+              />
+              <Profile size={40} name={row.original.name} src={row.original.thumbnail ?? row.original.image} />
               <b>{value}</b>
             </div>
           );
@@ -65,7 +85,7 @@ const CharacterTable = () => {
         Cell: AbilityCell,
       },
     ],
-    []
+    [onClick]
   );
 
   return <Table columns={columns} data={characterData} />;

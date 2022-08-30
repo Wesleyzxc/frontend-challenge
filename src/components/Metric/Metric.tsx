@@ -6,7 +6,7 @@ interface IMetricProp extends CharacterAbility {}
 const Metric = ({ abilityName, abilityScore }: IMetricProp) => (
   <div className={styles.metric}>
     <label className={styles.label}>{abilityName}</label>
-    <b className={styles.value}>{abilityScore}</b>
+    <b className={styles.value}>{abilityScore === 0 ? '-' : Math.round(abilityScore * 100) / 100}</b>
   </div>
 );
 
