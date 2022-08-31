@@ -11,10 +11,11 @@ const AbilityCell = ({ value }: CellProps<Character>) => (
 );
 
 interface ICharacterTableProps {
+  teamProfiles: Character[];
   setTeamProfiles: React.Dispatch<React.SetStateAction<Character[]>>;
 }
 
-const CharacterTable = ({ setTeamProfiles }: ICharacterTableProps) => {
+const CharacterTable = ({ teamProfiles, setTeamProfiles }: ICharacterTableProps) => {
   const onClick = useCallback(
     (clicked: Character, add: boolean) => {
       add
@@ -30,22 +31,21 @@ const CharacterTable = ({ setTeamProfiles }: ICharacterTableProps) => {
     () => [
       {
         accessor: 'name',
-        Cell: ({ value, row }: CellProps<Character>) => {
-          return (
-            <div className={styles.character}>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  // quick way to toggle without handling internal state
-                  row.toggleRowSelected();
-                  onClick(row.original, e.target.checked);
-                }}
-              />
-              <Profile size={40} name={row.original.name} src={row.original.thumbnail ?? row.original.image} />
-              <b>{value}</b>
-            </div>
-          );
-        },
+        Cell: ({ value, row }: CellProps<Character>) => (
+          <div className={styles.character}>
+            <input
+              type="checkbox"
+              checked={teamProfiles.some((profile) => profile.id === row.original.id)}
+              onChange={(e) => {
+                // quick way to toggle without handling internal state
+                row.toggleRowSelected();
+                onClick(row.original, e.target.checked);
+              }}
+            />
+            <Profile size={40} name={row.original.name} src={row.original.thumbnail ?? row.original.image} />
+            <b>{value}</b>
+          </div>
+        ),
         Header: 'Character',
       },
       {
@@ -85,10 +85,18 @@ const CharacterTable = ({ setTeamProfiles }: ICharacterTableProps) => {
         Cell: AbilityCell,
       },
     ],
-    [onClick]
+    [onClick, teamProfiles]
   );
 
-  return <Table columns={columns} data={characterData} />;
+  return (
+    <Table
+      columns={columns}
+      data={characterData}
+      initialState={{
+        selectedRowIds: teamProfiles.map((r) => characterData.indexOf(r)).reduce((ac, a) => ({ ...ac, [a]: true }), {}),
+      }}
+    />
+  );
 };
 
 export default CharacterTable;

@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { AbilityName, ABILITY_NAMES, Character } from '../../types';
 import Metric from '../Metric/Metric';
 import MetricLine from '../Metric/MetricLine';
-import Profile from '../Profile/Profile';
+import SquadProfile from '../Profile/SquadProfile';
 import CharacterTable from '../Table/CharacterTable';
 import styles from './Squad.module.css';
 
@@ -13,7 +13,6 @@ type AbilityScoreMap = {
 const Squad = () => {
   const [teamProfiles, setTeamProfiles] = useState<Character[]>([]);
   const title = teamProfiles.length ? 'Your champions!' : 'Select your squad to defend earthrealm';
-  console.log('🚀 - teamProfiles', teamProfiles);
 
   const sumOfAbility: AbilityScoreMap = teamProfiles.reduce(
     (acc, curr) => {
@@ -31,12 +30,21 @@ const Squad = () => {
     }
   );
 
+  const removeProfile = (id: number) => {
+    setTeamProfiles((profiles) => profiles.filter((profile) => profile.id !== id));
+  };
+
   return (
     <>
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.profiles}>
         {teamProfiles.map((profile) => (
-          <Profile key={profile.id} src={profile.thumbnail ?? profile.image} name={profile.name} />
+          <SquadProfile
+            key={profile.id}
+            src={profile.image}
+            name={profile.name}
+            onClick={() => removeProfile(profile.id)}
+          />
         ))}
       </div>
       <div className={styles.metrics}>
@@ -53,7 +61,7 @@ const Squad = () => {
       </div>
       <sub className={styles.sub}>* Totals as average for squad</sub>
 
-      <CharacterTable setTeamProfiles={setTeamProfiles} />
+      <CharacterTable teamProfiles={teamProfiles} setTeamProfiles={setTeamProfiles} />
     </>
   );
 };

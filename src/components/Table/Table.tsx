@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import { Column, TableOptions, useGlobalFilter, useRowSelect, useSortBy, useTable } from 'react-table';
 import styles from './Table.module.css';
 
@@ -5,7 +6,11 @@ interface IProps<T extends {}> {
   columns: Column<T>[];
 }
 
-const Table = <T extends {}>({ columns, ...tableOptions }: IProps<T> & TableOptions<T>) => {
+const Table = <T extends {}>({
+  columns,
+  children,
+  ...tableOptions
+}: IProps<T> & TableOptions<T> & PropsWithChildren) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setGlobalFilter } = useTable(
     {
       columns,
@@ -24,6 +29,7 @@ const Table = <T extends {}>({ columns, ...tableOptions }: IProps<T> & TableOpti
         placeholder="Search Characters..."
         onChange={(e) => setGlobalFilter(e.target.value || '')}
       />
+      {children}
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -39,9 +45,12 @@ const Table = <T extends {}>({ columns, ...tableOptions }: IProps<T> & TableOpti
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
+            const isSelected =
+              tableOptions.initialState?.selectedRowIds && tableOptions.initialState?.selectedRowIds[row.id];
+
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} className={row.isSelected ? styles.selected : undefined}>
+              <tr {...row.getRowProps()} className={isSelected ? styles.selected : undefined}>
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 ))}
